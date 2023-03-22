@@ -3,32 +3,27 @@ const seconds = document.querySelector(".seconds .number"),
   hours = document.querySelector(".hours .number"),
   days = document.querySelector(".days .number");
 
-let secValue = 60,
-  minValue = 60,
-  hourValue = 24,
-  dayValue = 15;
+const countDownDate = new Date("2023-04-08T23:59:59").getTime(); 
 
 const timeFunction = setInterval(() => {
-  secValue--;
+  const now = new Date().getTime();
+  const distance = countDownDate - now; 
 
-  if (secValue === 0) {
-    minValue--;
-    secValue = 60;
-  }
-  if (minValue === 0) {
-    hourValue--;
-    minValue = 60;
-  }
-  if (hourValue === 0) {
-    dayValue--;
-    hourValue = 24;
-  }
+  const daysValue = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hoursValue = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutesValue = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const secondsValue = Math.floor((distance % (1000 * 60)) / 1000);
 
-  if (dayValue === 0) {
+  if (distance < 0) { 
     clearInterval(timeFunction);
+    days.textContent = '00';
+    hours.textContent = '00';
+    minutes.textContent = '00';
+    seconds.textContent = '00';
+  } else {
+    days.textContent = daysValue < 10 ? `0${daysValue}` : daysValue;
+    hours.textContent = hoursValue < 10 ? `0${hoursValue}` : hoursValue;
+    minutes.textContent = minutesValue < 10 ? `0${minutesValue}` : minutesValue;
+    seconds.textContent = secondsValue < 10 ? `0${secondsValue}` : secondsValue;
   }
-  seconds.textContent = secValue < 10 ? `0${secValue}` : secValue;
-  minutes.textContent = minValue < 10 ? `0${minValue}` : minValue;
-  hours.textContent = hourValue < 10 ? `0${hourValue}` : hourValue;
-  days.textContent = dayValue < 10 ? `0${dayValue}` : dayValue;
-}, 1000); //1000ms = 1s
+}, 1000); 
